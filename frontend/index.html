@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Spectrum Analyzer</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🎵 Audio Spectrum Analyzer</h1>
+        <p class="subtitle">Upload an MP3 to visualize its Fourier frequency spectrum</p>
+
+        <div class="upload-section">
+            <input type="file" id="audioFile" accept=".mp3,.wav">
+            <button id="analyzeBtn" onclick="analyzeAudio()">Analyze</button>
+        </div>
+
+        <div id="loading" class="hidden">Computing FFT...</div>
+        <div id="error" class="hidden"></div>
+
+        <div class="chart-container">
+            <canvas id="spectrumChart"></canvas>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
