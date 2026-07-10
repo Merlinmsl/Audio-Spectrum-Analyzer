@@ -48,7 +48,7 @@ async function analyzeAudio() {
         }
 
         // Draw the spectrum chart
-        drawChart(da ta.frequencies, data.magnitudes);
+        drawChart(data.frequencies, data.magnitudes);
 
     } catch (error) {
         errorDiv.textContent = 'Error: ' + error.message;
