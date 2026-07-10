@@ -1,11 +1,12 @@
-import librosa
 import numpy as np
 
-def analyze_audio(file_path):
+def analyze_audio(samples, sample_rate):
     # 1. Load audio with librosa
     # librosa returns: y = audio sample array, sr = sample rate (e.g. 44100)
     # By default, librosa resamples everything to 22050 Hz unless you specify sr=None to keep the original rate.
-    y, sr = librosa.load(file_path, sr=None) 
+    # Without using the librosa library, we can assume the samples are already loaded and provided as input by the browser default MP3 decoder.
+    y = np.array(samples) 
+    sr = sample_rate 
     
     
     # 2. Convert to mono if stereo (if needed)
