@@ -1,17 +1,19 @@
 name: Version Tagging
 
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches:
       - main
       - dev
       - hotfix/*
 
 permissions:
-  contents: write   # allow pushing commits and tags
+  contents: write
 
 jobs:
   bump-version:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -21,25 +23,29 @@ jobs:
       - name: Bump version
         run: |
           version=$(cat VERSION)
+          base_branch=${{ github.event.pull_request.base.ref }}
+          head_branch=${{ github.event.pull_request.head.ref }}
 
-          if [[ $GITHUB_REF == refs/heads/main ]]; then
-            new_version=$(echo $version | awk -F. '{printf "%d.%d.%d", $1+1, 0, 0}')
-          elif [[ $GITHUB_REF == refs/heads/dev ]]; then
+          if [[ "$base_branch" == "dev" && "$head_branch" == feature/* ]]; then
+            # Feature merged into dev → minor bump
             new_version=$(echo $version | awk -F. '{printf "%d.%d.%d", $1, $2+1, 0}')
-          elif [[ $GITHUB_REF == refs/heads/hotfix/* ]]; then
+          elif [[ "$base_branch" == "main" && "$head_branch" == hotfix/* ]]; then
+            # Hotfix merged into main → patch bump
             new_version=$(echo $version | awk -F. '{printf "%d.%d.%d", $1, $2, $3+1}')
+          elif [[ "$base_branch" == "main" && "$head_branch" == "dev" ]]; then
+            # Dev merged into main → major bump
+            new_version=$(echo $version | awk -F. '{printf "%d.%d.%d", $1+1, 0, 0}')
+          else
+            echo "No version bump rule matched."
+            exit 0
           fi
 
           echo $new_version > VERSION
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
 
-          if git diff --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -am "Bump version to $new_version"
-            git tag -a v$new_version -m "Release $new_version"
-          fi
+          git commit -am "Bump version to $new_version"
+          git tag -a v$new_version -m "Release $new_version"
 
       - name: Push changes and tags
         run: |
