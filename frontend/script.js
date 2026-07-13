@@ -42,7 +42,7 @@ async function analyzeAudio() {
         const response = await fetch('http://localhost:5000/analyze', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json'},
-            body: JSON.stringify({ samples, sample_rate })
+            body: JSON.stringify({ samples, sample_rate }) 
         });
 
         const data = await response.json();
