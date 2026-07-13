@@ -1,4 +1,4 @@
-import flask import Flask, request, jsonify
+from flask import Flask, request, jsonify
 from flask_cors import  CORS
 from analyzer import analyze_audio
 
@@ -7,7 +7,7 @@ CORS(app) # Allow frontend (different port) to call this API
 
 @app.route('/analyze', methods=['POST'])
 def analyze():
-    data = request.get_json()
+    data = request.get_json(force=True)
     if not data or 'samples' not in data or 'sample_rate' not in data:
         return jsonify({'error': 'Missing samples or sampleRate'}), 400
     try:

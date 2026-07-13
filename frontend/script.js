@@ -20,7 +20,7 @@ async function analyzeAudio() {
 
         // Decode MP3 using browser's buit-in Web Audio API
         // This is what repleaces the need for a separate MP3 decoding library
-        const audioContext = new AuduiContext();
+        const audioContext = new AudioContext();
         const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
 
         // Get raw audio samples (mono , channel 0)
@@ -38,7 +38,7 @@ async function analyzeAudio() {
         const response = await fetch('http://localhost:5000/analyze', {
             method: 'POST',
             headers: { 'Content-Type': 'aplication/json'},
-            body: JSON.strigify({ samples, sample_rate })
+            body: JSON.stringify({ samples, sample_rate })
         });
 
         const data = await response.json();
