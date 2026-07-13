@@ -7,11 +7,16 @@ on:
       - dev
       - hotfix/*
 
+permissions:
+  contents: write   # allow pushing commits and tags
+
 jobs:
   bump-version:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Bump version
         run: |
