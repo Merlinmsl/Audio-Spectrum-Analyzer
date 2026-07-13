@@ -31,8 +31,12 @@ async function analyzeAudio() {
         // Only send first 5 seconds worth of samples
         // Sending entire song = too much data (could be millions of floats)
         // 5 seconds × 44100 Hz = 220,500 samples — manageable
+
+        // const duration_seconds = fullSamples.length / sample_rate; // calculate duration of the audio in seconds
+        // const maxsamples = sample_rate * duration_seconds; // analyze upto the full duration of the audio
         const maxsamples = sample_rate * 5; // Limit to 5 seconds of audio
         const samples = Array.from(fullSamples.slice(0, maxsamples)); // Limit samples to 5 seconds
+        
 
         // Send raw saples to Python for FFT analysis
         const response = await fetch('http://localhost:5000/analyze', {
@@ -88,8 +92,10 @@ function drawChart(frequencies, magnitudes) {
                     text: 'Frequency Spectrum (FFT)'
                 }
             },
+             
             scales: {
                 x: {
+                    type: 'logarithmic',
                     title: { display: true, text: 'Frequency (Hz)' },
                     ticks: { maxTicksLimit: 20 }
                 },
