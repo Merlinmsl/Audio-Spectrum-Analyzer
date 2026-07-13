@@ -1,0 +1,47 @@
+name: Version Tagging
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - hotfix/*
+
+permissions:
+  contents: write   # allow pushing commits and tags
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Bump version
+        run: |
+          version=$(cat VERSION)
+
+          if [[ $GITHUB_REF == refs/heads/main ]]; then
+            new_version=$(echo $version | awk -F. '{printf "%d.%d.%d", $1+1, 0, 0}')
+          elif [[ $GITHUB_REF == refs/heads/dev ]]; then
+            new_version=$(echo $version | awk -F. '{printf "%d.%d.%d", $1, $2+1, 0}')
+          elif [[ $GITHUB_REF == refs/heads/hotfix/* ]]; then
+            new_version=$(echo $version | awk -F. '{printf "%d.%d.%d", $1, $2, $3+1}')
+          fi
+
+          echo $new_version > VERSION
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+          if git diff --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -am "Bump version to $new_version"
+            git tag -a v$new_version -m "Release $new_version"
+          fi
+
+      - name: Push changes and tags
+        run: |
+          git push origin HEAD
+          git push origin --tags

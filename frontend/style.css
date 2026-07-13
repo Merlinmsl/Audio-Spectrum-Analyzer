@@ -1,0 +1,131 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #0a0a1a;
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    width: 90%;
+    max-width: 900px;
+    padding: 40px;
+    background: #12122a;
+    border-radius: 16px;
+    border: 1px solid #1e1e4a;
+    box-shadow: 0 0 40px rgba(0, 212, 255, 0.08);
+}
+
+h1 {
+    font-size: 2rem;
+    color: #00d4ff;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.subtitle {
+    text-align: center;
+    color: #8888aa;
+    margin-bottom: 32px;
+    font-size: 0.95rem;
+}
+
+/* ---- Upload Section ---- */
+.upload-section {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+input[type="file"] {
+    background: #1e1e4a;
+    color: #ccccff;
+    border: 1px dashed #00d4ff;
+    border-radius: 8px;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+input[type="file"]:hover {
+    background: #25255a;
+}
+
+button {
+    background: #00d4ff;
+    color: #0a0a1a;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 28px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+button:hover {
+    background: #00aacc;
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: translateY(0px);
+}
+
+/* ---- Loading & Error States ---- */
+#loading {
+    text-align: center;
+    color: #00d4ff;
+    font-size: 0.95rem;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+    animation: pulse 1.2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.4; }
+}
+
+#error {
+    text-align: center;
+    color: #ff4466;
+    background: rgba(255, 68, 102, 0.1);
+    border: 1px solid #ff4466;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+}
+
+/* ---- Hidden Utility ---- */
+.hidden {
+    display: none;
+}
+
+/* ---- Chart ---- */
+.chart-container {
+    background: #0d0d24;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #1e1e4a;
+    margin-top: 16px;
+}
+
+
+
+
+
+
+

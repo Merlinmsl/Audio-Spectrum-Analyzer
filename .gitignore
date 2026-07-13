@@ -1,0 +1,5 @@
+# .gitignore
+backend/bin/
+backend/venv/
+__pycache__/
+*.pyc
