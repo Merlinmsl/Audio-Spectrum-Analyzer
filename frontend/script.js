@@ -14,16 +14,31 @@ async function analyzeAudio() {
     // Show loading, hide errors
     loading.classList.remove('hidden');
     errorDiv.classList.add('hidden');
-
-    // Build form data to send file
-    const formData = new FormData();
-    formData.append('file', fileInput.files[0]);
-
     try {
-        // Send to Flask backend
+        // Read file as ArrayBuffer
+        const arrayBuffer = await fileInput.files[0].arrayBuffer();
+
+        // Decode MP3 using browser's buit-in Web Audio API
+        // This is what repleaces the need for a separate MP3 decoding library
+        const audioContext = new AudioContext();
+        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+        // Get raw audio samples (mono , channel 0)
+        // audioBuffer.getChannelData(0) returns Float32Array of samples in range [-1.0, 1.0]
+        const fullSamples = audioBuffer.getChannelData(0);
+        const sample_rate = audioBuffer.sampleRate;
+
+        // Only send first 5 seconds worth of samples
+        // Sending entire song = too much data (could be millions of floats)
+        // 5 seconds × 44100 Hz = 220,500 samples — manageable
+        const maxsamples = sample_rate * 5; // Limit to 5 seconds of audio
+        const samples = Array.from(fullSamples.slice(0, maxsamples)); // Limit samples to 5 seconds
+
+        // Send raw saples to Python for FFT analysis
         const response = await fetch('http://localhost:5000/analyze', {
             method: 'POST',
-            body: formData
+            headers: { 'Content-Type': 'aplication/json'},
+            body: JSON.stringify({ samples, sample_rate })
         });
 
         const data = await response.json();
