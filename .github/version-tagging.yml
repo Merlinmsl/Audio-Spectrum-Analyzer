@@ -1,0 +1,49 @@
+name: Version Tagging
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - hotfix/*
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Bump version
+        run: |
+          if [[ $GITHUB_REF == refs/heads/main ]]; then
+            npm version major -m "Major release %s"
+          elif [[ $GITHUB_REF == refs/heads/dev ]]; then
+            npm version minor -m "Minor release %s"
+          elif [[ $GITHUB_REF == refs/heads/hotfix/* ]]; then
+            npm version patch -m "Patch release %s"
+          fi
+
+      - name: Push tags
+        run: |
+          git push origin --tags
+          git push origin HEAD
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
