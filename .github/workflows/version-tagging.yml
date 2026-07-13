@@ -13,37 +13,25 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
       - name: Bump version
         run: |
+          version=$(cat VERSION)
+
           if [[ $GITHUB_REF == refs/heads/main ]]; then
-            npm version major -m "Major release %s"
+            new_version=$(echo $version | awk -F. '{print $1+1".0.0"}')
           elif [[ $GITHUB_REF == refs/heads/dev ]]; then
-            npm version minor -m "Minor release %s"
+            new_version=$(echo $version | awk -F. '{print $1"."$2+1".0"}')
           elif [[ $GITHUB_REF == refs/heads/hotfix/* ]]; then
-            npm version patch -m "Patch release %s"
+            new_version=$(echo $version | awk -F. '{print $1"."$2"."$3+1}')
           fi
 
-      - name: Push tags
+          echo $new_version > VERSION
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git commit -am "Bump version to $new_version"
+          git tag -a v$new_version -m "Release $new_version"
+
+      - name: Push changes and tags
         run: |
-          git push origin --tags
           git push origin HEAD
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+          git push origin --tags
