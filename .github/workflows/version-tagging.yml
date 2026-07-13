@@ -1,7 +1,8 @@
 name: Version Tagging
 
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches:
       - main
       - dev
@@ -12,6 +13,7 @@ permissions:
 
 jobs:
   bump-version:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -22,11 +24,13 @@ jobs:
         run: |
           version=$(cat VERSION)
 
-          if [[ $GITHUB_REF == refs/heads/main ]]; then
+          target_branch=${{ github.event.pull_request.base.ref }}
+
+          if [[ "$target_branch" == "main" ]]; then
             new_version=$(echo $version | awk -F. '{printf "%d.%d.%d", $1+1, 0, 0}')
-          elif [[ $GITHUB_REF == refs/heads/dev ]]; then
+          elif [[ "$target_branch" == "dev" ]]; then
             new_version=$(echo $version | awk -F. '{printf "%d.%d.%d", $1, $2+1, 0}')
-          elif [[ $GITHUB_REF == refs/heads/hotfix/* ]]; then
+          elif [[ "$target_branch" == hotfix/* ]]; then
             new_version=$(echo $version | awk -F. '{printf "%d.%d.%d", $1, $2, $3+1}')
           fi
 
