@@ -18,18 +18,23 @@ jobs:
           version=$(cat VERSION)
 
           if [[ $GITHUB_REF == refs/heads/main ]]; then
-            new_version=$(echo $version | awk -F. '{print $1+1".0.0"}')
+            new_version=$(echo $version | awk -F. '{printf "%d.%d.%d", $1+1, 0, 0}')
           elif [[ $GITHUB_REF == refs/heads/dev ]]; then
-            new_version=$(echo $version | awk -F. '{print $1"."$2+1".0"}')
+            new_version=$(echo $version | awk -F. '{printf "%d.%d.%d", $1, $2+1, 0}')
           elif [[ $GITHUB_REF == refs/heads/hotfix/* ]]; then
-            new_version=$(echo $version | awk -F. '{print $1"."$2"."$3+1}')
+            new_version=$(echo $version | awk -F. '{printf "%d.%d.%d", $1, $2, $3+1}')
           fi
 
           echo $new_version > VERSION
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git commit -am "Bump version to $new_version"
-          git tag -a v$new_version -m "Release $new_version"
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+          if git diff --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -am "Bump version to $new_version"
+            git tag -a v$new_version -m "Release $new_version"
+          fi
 
       - name: Push changes and tags
         run: |
