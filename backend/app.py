@@ -40,7 +40,7 @@ def analyze():
 
 @app.route('/process', methods=['POST'])
 def process():
-    data = requenst.get_json(force=True)
+    data = request.get_json(force=True)
     
     if not data or 'session_id' not in data:
         return jsonify({'error': 'Missing session_id'}), 400
@@ -55,18 +55,18 @@ def process():
         samples = session['samples']
         sample_rate = session['sample_rate']
         
-    # For phase 1 - Just convert to wav with no modifications
-    # Phase 2 will add equalizer here
-    # phase 3 will add noice removal here
-    wav_buffer = samples_to_wav(samples, sample_rate)
+        # For phase 1 - Just convert to wav with no modifications
+        # Phase 2 will add equalizer here
+        # phase 3 will add noice removal here
+        wav_buffer = samples_to_wav(samples, sample_rate)
     
-    # Send wav file as download
-    return send_file(
-        wav_buffer,
-        mimetype='audio/wav',
-        as_attachment=True,
-        download_name='processed_audio.wav'
-    )
+        # Send wav file as download
+        return send_file(
+            wav_buffer,
+            mimetype='audio/wav',
+            as_attachment=True,
+            download_name='processed_audio.wav'
+        )
     
     except Exception as e:
         return jsonify({'error': str(e)}), 500
