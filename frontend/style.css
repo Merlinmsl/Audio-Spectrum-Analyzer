@@ -124,7 +124,61 @@ button:active {
 }
 
 
+/* ---- Player Section ---- */
+#playerSection {
+    margin-top: 24px;
+    padding: 20px;
+    background: #0d0d24;
+    border-radius: 12px;
+    border: 1px solid #1e1e4a;
+}
 
+#audioPlayer {
+    width: 100%;
+    margin-top: 10px;
+    filter: invert(1) hue-rotate(180deg); /* Dark theme audio player */
+}
+
+/* ---- Controls Section ---- */
+#controlsSection {
+    margin-top: 16px;
+    padding: 20px;
+    background: #0d0d24;
+    border-radius: 12px;
+    border: 1px solid #1e1e4a;
+}
+
+.section-title {
+    color: #00d4ff;
+    font-size: 1rem;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.controls-hint {
+    color: #8888aa;
+    font-size: 0.85rem;
+    margin-bottom: 16px;
+}
+
+#downloadBtn {
+    background: #1e1e4a;
+    color: #00d4ff;
+    border: 1px solid #00d4ff;
+    width: 100%;
+    padding: 12px;
+}
+
+#downloadBtn:hover {
+    background: #00d4ff;
+    color: #0a0a1a;
+}
+
+#downloadBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
 
 
 
