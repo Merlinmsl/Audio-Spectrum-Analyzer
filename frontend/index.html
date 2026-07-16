@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="container">
         <h1>🎵 Audio Spectrum Analyzer</h1>
@@ -24,6 +26,26 @@
             <canvas id="spectrumChart"></canvas>
         </div>
     </div>
+
+    <!-- ADD THIS: Audio Player Section -->
+    <div id="playerSection" class="hidden">
+        <h3 class="section-title">🔊 Preview</h3>
+        <audio id="audioPlayer" controls></audio>
+    </div>
+
+    <!-- ADD THIS: Controls Panel (placeholder for Phase 2 & 3) -->
+    <div id="controlsSection" class="hidden">
+        <h3 class="section-title">⚙️ Export</h3>
+        <p class="controls-hint">Equalizer and Noise Removal coming in next phases</p>
+        <button id="downloadBtn" onclick="downloadAudio()">
+            ⬇ Download as WAV
+        </button>
+    </div>
+
+
+
+
     <script src="script.js"></script>
 </body>
+
 </html>
