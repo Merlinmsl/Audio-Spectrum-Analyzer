@@ -10,14 +10,16 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    padding: 32px 16px;
 }
 
 .container {
     width: 90%;
-    max-width: 900px;
-    padding: 40px;
+    max-width: 1200px;
+    padding: 32px;
     background: #12122a;
     border-radius: 16px;
     border: 1px solid #1e1e4a;
@@ -116,6 +118,8 @@ button:active {
 
 /* ---- Chart ---- */
 .chart-container {
+    display: block;
+    width: 100%;
     background: #0d0d24;
     border-radius: 12px;
     padding: 20px;
@@ -123,25 +127,19 @@ button:active {
     margin-top: 16px;
 }
 
-
-/* ---- Player Section ---- */
-#playerSection {
-    margin-top: 24px;
-    padding: 20px;
-    background: #0d0d24;
-    border-radius: 12px;
-    border: 1px solid #1e1e4a;
-}
-
-#audioPlayer {
+/* ---- Bottom Sections Row ---- */
+/* Player + Controls sit side by side below chart */
+.bottom-row {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
     width: 100%;
-    margin-top: 10px;
-    filter: invert(1) hue-rotate(180deg); /* Dark theme audio player */
+    align-items: flex-start;
 }
 
 /* ---- Controls Section ---- */
 #controlsSection {
-    margin-top: 16px;
+    flex: 1;
     padding: 20px;
     background: #0d0d24;
     border-radius: 12px;
@@ -179,7 +177,5 @@ button:active {
     cursor: not-allowed;
     transform: none;
 }
-
-
 
 
