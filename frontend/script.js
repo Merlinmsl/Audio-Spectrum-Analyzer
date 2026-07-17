@@ -36,13 +36,13 @@ async function analyzeAudio() {
         // const maxsamples = sample_rate * duration_seconds; // analyze upto the full duration of the audio
         const maxsamples = sample_rate * 5; // Limit to 5 seconds of audio
         const samples = Array.from(fullSamples.slice(0, maxsamples)); // Limit samples to 5 seconds
-        
+
 
         // Send raw saples to Python for FFT analysis
         const response = await fetch('http://localhost:5000/analyze', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json'},
-            body: JSON.stringify({ samples, sample_rate }) 
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ samples, sample_rate })
         });
 
         const data = await response.json();
@@ -53,6 +53,18 @@ async function analyzeAudio() {
 
         // Draw the spectrum chart
         drawChart(data.frequencies, data.magnitudes);
+
+
+        // Store session ID for download later
+        window.currentSessionId = data.session_id;
+
+        // Show preview player using the original file
+        const audioPlayer = document.getElementById('audioPlayer');
+        audioPlayer.src = URL.createObjectURL(fileInput.files[0]);
+        document.getElementById('playerSection').classList.remove('hidden');
+        document.getElementById('controlsSection').classList.remove('hidden');
+
+
 
     } catch (error) {
         errorDiv.textContent = 'Error: ' + error.message;
@@ -92,7 +104,7 @@ function drawChart(frequencies, magnitudes) {
                     text: 'Frequency Spectrum (FFT)'
                 }
             },
-             
+
             scales: {
                 x: {
                     type: 'logarithmic',
@@ -105,4 +117,47 @@ function drawChart(frequencies, magnitudes) {
             }
         }
     });
+}
+
+async function downloadAudio() {
+    if (!window.currentSessionId) {
+        alert('Please analyze an audio file first');
+        return;
+    }
+
+    const downloadBtn = document.getElementById('downloadBtn');
+    downloadBtn.textContent = '⏳ Processing...';
+    downloadBtn.disabled = true;
+
+    try {
+        const response = await fetch('http://localhost:5000/process', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ session_id: window.currentSessionId })
+        });
+
+        if (!response.ok) {
+            const errData = await response.json();
+            throw new Error(errData.error);
+        }
+
+        // Get binary WAV data and trigger browser download
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+
+        // Create invisible link and click it to trigger download
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'processed_audio.wav';
+        a.click();
+
+        // Clean up the object URL
+        URL.revokeObjectURL(url);
+
+    } catch (error) {
+        alert('Download failed: ' + error.message);
+    } finally {
+        downloadBtn.textContent = '⬇ Download as WAV';
+        downloadBtn.disabled = false;
+    }
 }

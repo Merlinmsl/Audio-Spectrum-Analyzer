@@ -50,7 +50,7 @@ def analyze_audio(samples, sample_rate):
     # 9. Return frequencies list and magnitudes list
     # Downsample for frontend (too many points = slow chart)
     # Take every 10th point for performance
-    step = max(1, len(frequencies) // 1000)
+    step = max(1, len(frequencies) // 3000)
     frequencies = frequencies[::step].tolist()
     magnitude_db = magnitude_db[::step].tolist()
     
