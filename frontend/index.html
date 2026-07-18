@@ -1,51 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audio Spectrum Analyzer</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>SpectraLab Pro</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
     <div class="container">
-        <h1>🎵 Audio Spectrum Analyzer</h1>
-        <p class="subtitle">Upload an MP3 to visualize its Fourier frequency spectrum</p>
 
-        <div class="upload-section">
-            <input type="file" id="audioFile" accept=".mp3,.wav">
-            <button id="analyzeBtn" onclick="analyzeAudio()">Analyze</button>
+        <!-- Header -->
+        <header>
+            <h1>SpectraLab Pro</h1>
+            <p class="subtitle">Professional Audio Spectrum Analyzer</p>
+        </header>
+
+        <!-- Source Selection Tabs -->
+        <div class="source-tabs">
+            <button class="source-btn active" data-source="file" onclick="switchSource('file')">
+                📁 File
+            </button>
+            <button class="source-btn" data-source="mic" onclick="switchSource('mic')">
+                🎙️ Microphone
+            </button>
+            <button class="source-btn" data-source="system" onclick="switchSource('system')">
+                🖥️ System Audio
+            </button>
         </div>
 
-        <div id="loading" class="hidden">Computing FFT...</div>
+        <!-- File Source Panel -->
+        <div id="sourceFile" class="source-panel">
+            <input type="file" id="audioFile" accept=".mp3,.wav">
+            <button id="playBtn" onclick="startFileAnalysis()">▶ Play & Analyze</button>
+            <button id="pauseBtn" class="hidden" onclick="togglePause()">⏸ Pause</button>
+            <button id="stopBtn" class="hidden" onclick="stopAnalysis()">⏹ Stop</button>
+            <button id="downloadBtn" class="hidden" onclick="downloadAudio()">⬇ Download WAV</button>
+        </div>
+
+        <!-- Mic Source Panel -->
+        <div id="sourceMic" class="source-panel hidden">
+            <button id="micStartBtn" onclick="startMicAnalysis()">🎙️ Start Microphone</button>
+            <button id="micStopBtn" class="hidden" onclick="stopAnalysis()">⏹ Stop</button>
+        </div>
+
+        <!-- System Audio Panel -->
+        <div id="sourceSystem" class="source-panel hidden">
+            <button id="sysStartBtn" onclick="startSystemAnalysis()">🖥️ Capture System Audio</button>
+            <button id="sysStopBtn" class="hidden" onclick="stopAnalysis()">⏹ Stop</button>
+            <p class="source-hint">Chrome/Edge only — select tab and tick "Share audio"</p>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span id="statusText" class="status-ready">● Ready</span>
+            <span id="dominantNote">Note: --</span>
+            <span id="dominantFreq">-- Hz</span>
+            <span id="peakLevel">Peak: -- dB</span>
+        </div>
+
+        <!-- Loading & Error -->
+        <div id="loading" class="hidden">Initializing audio...</div>
         <div id="error" class="hidden"></div>
 
+        <!-- Main Visualization Canvas -->
         <div class="chart-container">
-            <canvas id="spectrumChart"></canvas>
+            <div class="chart-controls">
+                <label>FFT Size:
+                    <select id="fftSizeSelect" onchange="updateFFTSize()">
+                        <option value="2048">2048</option>
+                        <option value="4096" selected>4096</option>
+                        <option value="8192">8192</option>
+                        <option value="16384">16384</option>
+                    </select>
+                </label>
+                <label>Smoothing:
+                    <input type="range" id="smoothingSlider"
+                           min="0" max="0.99" step="0.01" value="0.8"
+                           oninput="updateSmoothing()">
+                </label>
+                <label class="toggle-label">
+                    <input type="checkbox" id="peakHoldToggle" onchange="togglePeakHold()">
+                    Peak Hold
+                </label>
+            </div>
+
+            <!-- Live canvas — drawn by JavaScript directly -->
+            <canvas id="liveCanvas"></canvas>
         </div>
+
+        <!-- Bottom Row -->
+        <div class="bottom-row hidden" id="bottomRow">
+            <div class="info-panel">
+                <h3 class="section-title">📊 Analysis</h3>
+                <p class="info-line">Bass (20–250 Hz): <span id="bassLevel">-- dB</span></p>
+                <p class="info-line">Mid (250–4k Hz): <span id="midLevel">-- dB</span></p>
+                <p class="info-line">Treble (4k–20k Hz): <span id="trebleLevel">-- dB</span></p>
+            </div>
+        </div>
+
     </div>
 
-    <!-- ADD THIS: Audio Player Section -->
-    <div id="playerSection" class="hidden">
-        <h3 class="section-title">🔊 Preview</h3>
-        <audio id="audioPlayer" controls></audio>
-    </div>
-
-    <!-- ADD THIS: Controls Panel (placeholder for Phase 2 & 3) -->
-    <div id="controlsSection" class="hidden">
-        <h3 class="section-title">⚙️ Export</h3>
-        <p class="controls-hint">Equalizer and Noise Removal coming in next phases</p>
-        <button id="downloadBtn" onclick="downloadAudio()">
-            ⬇ Download as WAV
-        </button>
-    </div>
-
-
-
-
+    <audio id="audioPlayer" style="display:none;"></audio>
+    <script src="live-input.js"></script>
     <script src="script.js"></script>
 </body>
-
 </html>
