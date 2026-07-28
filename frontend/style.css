@@ -177,3 +177,172 @@ button:active {
     cursor: not-allowed;
     transform: none;
 }
+
+/* ---- Header ---- */
+header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+/* ---- Source Tabs ---- */
+.source-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #1e1e4a;
+    padding-bottom: 12px;
+}
+
+.source-btn {
+    background: transparent;
+    color: #8888aa;
+    border: 1px solid #1e1e4a;
+    padding: 8px 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+.source-btn.active {
+    background: #1e1e4a;
+    color: #00d4ff;
+    border-color: #00d4ff;
+}
+
+.source-btn:hover {
+    color: #00d4ff;
+    transform: none;
+    background: #1a1a3a;
+}
+
+/* ---- Source Panels ---- */
+.source-panel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+    padding: 16px;
+    background: #0d0d24;
+    border-radius: 10px;
+    border: 1px solid #1e1e4a;
+}
+
+.source-hint {
+    color: #8888aa;
+    font-size: 0.8rem;
+    width: 100%;
+}
+
+/* ---- Status Bar ---- */
+.status-bar {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    padding: 10px 16px;
+    background: #0a0a1a;
+    border-radius: 8px;
+    border: 1px solid #1e1e4a;
+    margin-bottom: 12px;
+    font-size: 0.85rem;
+    color: #8888aa;
+    flex-wrap: wrap;
+}
+
+.status-ready  { color: #8888aa; }
+.status-playing { color: #00d4ff; }
+.status-live    { color: #00ff88; }
+.status-paused  { color: #ffaa00; }
+
+/* ---- Chart Controls ---- */
+.chart-controls {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+    font-size: 0.85rem;
+    color: #8888aa;
+}
+
+.chart-controls label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.chart-controls select,
+.chart-controls input[type="range"] {
+    background: #1e1e4a;
+    color: #ccccff;
+    border: 1px solid #2a2a5a;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 0.85rem;
+}
+
+.toggle-label {
+    cursor: pointer;
+    color: #ccccff;
+}
+
+/* ---- Live Canvas ---- */
+#liveCanvas {
+    width: 100%;
+    height: 300px;
+    display: block;
+    border-radius: 8px;
+}
+
+/* ---- Bottom Row ---- */
+.bottom-row {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.info-panel {
+    flex: 1;
+    min-width: 200px;
+    padding: 16px 20px;
+    background: #0d0d24;
+    border-radius: 12px;
+    border: 1px solid #1e1e4a;
+}
+
+.info-line {
+    color: #8888aa;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.info-line span {
+    color: #00d4ff;
+    font-weight: 600;
+}
+
+/* ---- Download button override ---- */
+#downloadBtn {
+    background: #1e1e4a;
+    color: #00d4ff;
+    border: 1px solid #00d4ff;
+    padding: 8px 20px;
+    font-size: 0.9rem;
+}
+
+#downloadBtn:hover {
+    background: #00d4ff;
+    color: #0a0a1a;
+}
+
+#downloadBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+
+
